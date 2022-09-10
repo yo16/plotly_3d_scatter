@@ -1,4 +1,5 @@
 
+// ３次元散布図を描画
 function draw_scatter_3d(csv_rec){
     let data_x=[], data_y=[], data_z=[];
     for(let i=0; i<csv_rec.length; i++){
@@ -38,6 +39,17 @@ function draw_scatter_3d(csv_rec){
     );
 };
 
+// テキストのCSVを配列に変換
+function convertCSVtoArray(str){
+    let result = [];
+    let rows = str.split("\n");
+    for(let i=0; i<rows.length; i++){
+        result.push(rows[i].split(','));
+    }
+    return result;
+}
+
+/* for test
 draw_scatter_3d(
     [
         [10,10,10],
@@ -45,4 +57,21 @@ draw_scatter_3d(
         [30,30,30]
     ]
 );
+*/
 
+// ファイルセレクター"csvFile"で選ばれたCSVファイルを描画
+let dom_file_selector = document.getElementById("csvFile");
+dom_file_selector.onchange = function(){
+    let file_list = this.files;
+    let cur_file = file_list[0];
+
+    let reader = new FileReader();
+    reader.readAsText(cur_file);
+    reader.onload = function(){
+        // テキストのCSVを配列に変換
+        let csv_ary = convertCSVtoArray(reader.result);
+
+        // 描画
+        draw_scatter_3d(csv_ary);
+    };
+}
